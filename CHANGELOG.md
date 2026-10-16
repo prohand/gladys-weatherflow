@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-10-16
+
 ### Added
 
 - WeatherFlow Tempest stations in Gladys: temperature, humidity, station and sea-level pressure, wind speed, gust and direction, illuminance, UV index, rain of the last hour and of the day, raining, lightning strikes of the last hour and last strike distance, battery.
@@ -19,4 +21,5 @@ All notable changes to this integration are documented here. The format follows
 - Temperature unit (°C, °F) and wind unit (km/h, m/s, mph) settings.
 - English, French, German and Spanish translations (configuration screen, messages, widget, documentation).
 
-[Unreleased]: https://github.com/prohand/gladys-weatherflow/commits/main
+[Unreleased]: https://github.com/prohand/gladys-weatherflow/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/prohand/gladys-weatherflow/releases/tag/v0.0.1

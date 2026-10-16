@@ -8,13 +8,18 @@
     "de": "Deine WeatherFlow Tempest Wetterstation in Gladys, über das lokale Netzwerk oder die Cloud.",
     "es": "Su estación meteorológica WeatherFlow Tempest en Gladys, por red local o por la nube."
   },
-  "version": "0.0.0",
-  "docker_image": "ghcr.io/prohand/gladys-weatherflow:0.0.0",
+  "version": "0.0.1",
+  "docker_image": "ghcr.io/prohand/gladys-weatherflow:0.0.1",
   "gladys_version": ">=5.1.0",
   "cover_image": "https://raw.githubusercontent.com/prohand/gladys-weatherflow/main/cover.png",
   "categories": ["environment"],
   "transports": ["local", "cloud"],
-  "network_discovery": [{ "type": "udp-broadcast", "ports": [50222] }],
+  "network_discovery": [
+    {
+      "type": "udp-broadcast",
+      "ports": [50222]
+    }
+  ],
   "config_schema": [
     {
       "key": "intro",
@@ -83,7 +88,12 @@
       "options": [
         {
           "value": "celsius",
-          "label": { "en": "Celsius", "fr": "Celsius", "de": "Celsius", "es": "Celsius" }
+          "label": {
+            "en": "Celsius",
+            "fr": "Celsius",
+            "de": "Celsius",
+            "es": "Celsius"
+          }
         },
         {
           "value": "fahrenheit",
@@ -116,15 +126,30 @@
       "options": [
         {
           "value": "kilometer-per-hour",
-          "label": { "en": "km/h", "fr": "km/h", "de": "km/h", "es": "km/h" }
+          "label": {
+            "en": "km/h",
+            "fr": "km/h",
+            "de": "km/h",
+            "es": "km/h"
+          }
         },
         {
           "value": "meter-per-second",
-          "label": { "en": "m/s", "fr": "m/s", "de": "m/s", "es": "m/s" }
+          "label": {
+            "en": "m/s",
+            "fr": "m/s",
+            "de": "m/s",
+            "es": "m/s"
+          }
         },
         {
           "value": "mile-per-hour",
-          "label": { "en": "mph", "fr": "mph", "de": "mph", "es": "mph" }
+          "label": {
+            "en": "mph",
+            "fr": "mph",
+            "de": "mph",
+            "es": "mph"
+          }
         }
       ]
     },
@@ -143,7 +168,12 @@
         "de": "Für den Luftdruck auf Meereshöhe. Leer: die in der Tempest-App eingestellte Höhe (mit Token).",
         "es": "Para la presión a nivel del mar. Vacío: la altitud de la app Tempest (con el token)."
       },
-      "placeholder": { "en": "e.g. 152", "fr": "ex. 152", "de": "z. B. 152", "es": "p. ej. 152" },
+      "placeholder": {
+        "en": "e.g. 152",
+        "fr": "ex. 152",
+        "de": "z. B. 152",
+        "es": "p. ej. 152"
+      },
       "required": false
     },
     {
@@ -202,7 +232,12 @@
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          }
         }
       ],
       "variables": [
@@ -237,7 +272,12 @@
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          }
         }
       ],
       "variables": [
@@ -254,7 +294,12 @@
         {
           "key": "energy",
           "type": "number",
-          "label": { "en": "Energy", "fr": "Énergie", "de": "Energie", "es": "Energía" }
+          "label": {
+            "en": "Energy",
+            "fr": "Énergie",
+            "de": "Energie",
+            "es": "Energía"
+          }
         },
         {
           "key": "strikes_last_hour",
@@ -287,7 +332,12 @@
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          }
         }
       ]
     }
@@ -313,7 +363,12 @@
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" },
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          },
           "required": true
         }
       ],
@@ -391,7 +446,12 @@
         {
           "key": "wind_gust",
           "type": "number",
-          "label": { "en": "Wind gust", "fr": "Rafale", "de": "Windböe", "es": "Ráfaga" }
+          "label": {
+            "en": "Wind gust",
+            "fr": "Rafale",
+            "de": "Windböe",
+            "es": "Ráfaga"
+          }
         },
         {
           "key": "wind_direction",
@@ -416,7 +476,12 @@
         {
           "key": "uv",
           "type": "number",
-          "label": { "en": "UV index", "fr": "Indice UV", "de": "UV-Index", "es": "Índice UV" }
+          "label": {
+            "en": "UV index",
+            "fr": "Indice UV",
+            "de": "UV-Index",
+            "es": "Índice UV"
+          }
         },
         {
           "key": "illuminance",
@@ -451,7 +516,12 @@
         {
           "key": "raining",
           "type": "boolean",
-          "label": { "en": "Raining", "fr": "Il pleut", "de": "Es regnet", "es": "Está lloviendo" }
+          "label": {
+            "en": "Raining",
+            "fr": "Il pleut",
+            "de": "Es regnet",
+            "es": "Está lloviendo"
+          }
         },
         {
           "key": "lightning_last_hour",
@@ -505,22 +575,42 @@
           "key": "device",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" },
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          },
           "required": true
         },
         {
           "key": "day",
           "type": "select",
-          "label": { "en": "Day", "fr": "Jour", "de": "Tag", "es": "Día" },
+          "label": {
+            "en": "Day",
+            "fr": "Jour",
+            "de": "Tag",
+            "es": "Día"
+          },
           "default": "today",
           "options": [
             {
               "value": "today",
-              "label": { "en": "Today", "fr": "Aujourd'hui", "de": "Heute", "es": "Hoy" }
+              "label": {
+                "en": "Today",
+                "fr": "Aujourd'hui",
+                "de": "Heute",
+                "es": "Hoy"
+              }
             },
             {
               "value": "tomorrow",
-              "label": { "en": "Tomorrow", "fr": "Demain", "de": "Morgen", "es": "Mañana" }
+              "label": {
+                "en": "Tomorrow",
+                "fr": "Demain",
+                "de": "Morgen",
+                "es": "Mañana"
+              }
             },
             {
               "value": "day_after_tomorrow",
@@ -649,7 +739,12 @@
           "key": "station",
           "type": "select",
           "source": "devices",
-          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+          "label": {
+            "en": "Station",
+            "fr": "Station",
+            "de": "Station",
+            "es": "Estación"
+          }
         }
       ],
       "action_timeout_seconds": 20

@@ -1,6 +1,6 @@
 {
   "name": "gladys-weatherflow",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Gladys Assistant external integration for WeatherFlow Tempest weather stations (local UDP and cloud).",
   "type": "module",
