@@ -1,0 +1,658 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "WeatherFlow Tempest",
+  "description": {
+    "en": "Your WeatherFlow Tempest weather station in Gladys, over the local network or the cloud.",
+    "fr": "Votre station météo WeatherFlow Tempest dans Gladys, en réseau local ou via le cloud.",
+    "de": "Deine WeatherFlow Tempest Wetterstation in Gladys, über das lokale Netzwerk oder die Cloud.",
+    "es": "Su estación meteorológica WeatherFlow Tempest en Gladys, por red local o por la nube."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-weatherflow:0.0.0",
+  "gladys_version": ">=5.1.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-weatherflow/main/cover.png",
+  "categories": ["environment"],
+  "transports": ["local", "cloud"],
+  "network_discovery": [{ "type": "udp-broadcast", "ports": [50222] }],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "Local network: nothing to set. Gladys listens to the Tempest hub on the network (UDP 50222) and the station shows up in the Discovery tab. Cloud: create a personal access token on tempestwx.com (Settings, Data Authorizations) and paste it below. It brings the station names, the altitude, the forecast, and takes over when the hub is not heard on the local network.",
+        "fr": "Réseau local : rien à régler. Gladys écoute le hub Tempest sur le réseau (UDP 50222) et la station apparaît dans l'onglet Découverte. Cloud : créez un jeton d'accès personnel sur tempestwx.com (Settings, Data Authorizations) et collez-le ci-dessous. Il apporte le nom des stations, l'altitude, les prévisions, et prend le relais quand le hub n'est pas entendu sur le réseau local.",
+        "de": "Lokales Netzwerk: nichts einzustellen. Gladys hört den Tempest-Hub im Netzwerk (UDP 50222) und die Station erscheint im Tab „Erkennung“. Cloud: Erstelle ein persönliches Zugriffstoken auf tempestwx.com (Settings, Data Authorizations) und füge es unten ein. Es liefert die Namen der Stationen, die Höhe, die Vorhersage und übernimmt, wenn der Hub im lokalen Netzwerk nicht gehört wird.",
+        "es": "Red local: nada que configurar. Gladys escucha el hub Tempest en la red (UDP 50222) y la estación aparece en la pestaña Descubrimiento. Nube: cree un token de acceso personal en tempestwx.com (Settings, Data Authorizations) y péguelo abajo. Aporta el nombre de las estaciones, la altitud, la previsión, y toma el relevo cuando el hub no se escucha en la red local."
+      },
+      "links": [
+        {
+          "url": "https://tempestwx.com/settings/tokens",
+          "label": {
+            "en": "Create a token",
+            "fr": "Créer un jeton",
+            "de": "Token erstellen",
+            "es": "Crear un token"
+          }
+        },
+        {
+          "url": "https://github.com/prohand/gladys-weatherflow/blob/main/docs/en.md",
+          "label": {
+            "en": "Integration documentation",
+            "fr": "Documentation de l'intégration",
+            "de": "Dokumentation der Integration",
+            "es": "Documentación de la integración"
+          }
+        }
+      ]
+    },
+    {
+      "key": "token",
+      "type": "secret",
+      "label": {
+        "en": "Personal access token (cloud)",
+        "fr": "Jeton d'accès personnel (cloud)",
+        "de": "Persönliches Zugriffstoken (Cloud)",
+        "es": "Token de acceso personal (nube)"
+      },
+      "description": {
+        "en": "Optional. Leave empty to use the local network only.",
+        "fr": "Facultatif. Laissez vide pour n'utiliser que le réseau local.",
+        "de": "Optional. Leer lassen, um nur das lokale Netzwerk zu nutzen.",
+        "es": "Opcional. Déjelo vacío para usar solo la red local."
+      },
+      "required": false
+    },
+    {
+      "key": "temperature_unit",
+      "type": "select",
+      "label": {
+        "en": "Temperature unit",
+        "fr": "Unité de température",
+        "de": "Temperatureinheit",
+        "es": "Unidad de temperatura"
+      },
+      "required": false,
+      "default": "celsius",
+      "options": [
+        {
+          "value": "celsius",
+          "label": { "en": "Celsius", "fr": "Celsius", "de": "Celsius", "es": "Celsius" }
+        },
+        {
+          "value": "fahrenheit",
+          "label": {
+            "en": "Fahrenheit",
+            "fr": "Fahrenheit",
+            "de": "Fahrenheit",
+            "es": "Fahrenheit"
+          }
+        }
+      ]
+    },
+    {
+      "key": "wind_unit",
+      "type": "select",
+      "label": {
+        "en": "Wind unit",
+        "fr": "Unité du vent",
+        "de": "Windeinheit",
+        "es": "Unidad del viento"
+      },
+      "description": {
+        "en": "The lightning distance follows it: miles with mph, kilometres otherwise.",
+        "fr": "La distance de la foudre suit : en miles avec mph, en kilomètres sinon.",
+        "de": "Die Blitzentfernung folgt ihr: Meilen bei mph, sonst Kilometer.",
+        "es": "La distancia de los rayos la sigue: millas con mph, kilómetros si no."
+      },
+      "required": false,
+      "default": "kilometer-per-hour",
+      "options": [
+        {
+          "value": "kilometer-per-hour",
+          "label": { "en": "km/h", "fr": "km/h", "de": "km/h", "es": "km/h" }
+        },
+        {
+          "value": "meter-per-second",
+          "label": { "en": "m/s", "fr": "m/s", "de": "m/s", "es": "m/s" }
+        },
+        {
+          "value": "mile-per-hour",
+          "label": { "en": "mph", "fr": "mph", "de": "mph", "es": "mph" }
+        }
+      ]
+    },
+    {
+      "key": "elevation",
+      "type": "string",
+      "label": {
+        "en": "Station altitude (m)",
+        "fr": "Altitude de la station (m)",
+        "de": "Höhe der Station (m)",
+        "es": "Altitud de la estación (m)"
+      },
+      "description": {
+        "en": "For the sea-level pressure. Empty: the altitude set in the Tempest app (needs the token).",
+        "fr": "Pour la pression au niveau de la mer. Vide : l'altitude réglée dans l'app Tempest (avec le jeton).",
+        "de": "Für den Luftdruck auf Meereshöhe. Leer: die in der Tempest-App eingestellte Höhe (mit Token).",
+        "es": "Para la presión a nivel del mar. Vacío: la altitud de la app Tempest (con el token)."
+      },
+      "placeholder": { "en": "e.g. 152", "fr": "ex. 152", "de": "z. B. 152", "es": "p. ej. 152" },
+      "required": false
+    },
+    {
+      "key": "timezone",
+      "type": "string",
+      "label": {
+        "en": "Time zone",
+        "fr": "Fuseau horaire",
+        "de": "Zeitzone",
+        "es": "Zona horaria"
+      },
+      "description": {
+        "en": "Midnight of the daily rain. Empty: the station's time zone (token), else UTC.",
+        "fr": "Minuit de la pluie du jour. Vide : le fuseau de la station (jeton), sinon UTC.",
+        "de": "Mitternacht des Tagesregens. Leer: die Zeitzone der Station (Token), sonst UTC.",
+        "es": "Medianoche de la lluvia diaria. Vacío: la zona de la estación (token), si no UTC."
+      },
+      "placeholder": {
+        "en": "e.g. Europe/Paris",
+        "fr": "ex. Europe/Paris",
+        "de": "z. B. Europe/Berlin",
+        "es": "p. ej. Europe/Madrid"
+      },
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 45
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "rain_started",
+      "label": {
+        "en": "Rain started",
+        "fr": "La pluie commence",
+        "de": "Regen hat begonnen",
+        "es": "Empieza a llover"
+      },
+      "description": {
+        "en": "The Tempest felt the first drops after a dry spell of at least ten minutes.",
+        "fr": "La Tempest a senti les premières gouttes après au moins dix minutes sans pluie.",
+        "de": "Die Tempest hat nach mindestens zehn trockenen Minuten die ersten Tropfen gespürt.",
+        "es": "La Tempest notó las primeras gotas tras al menos diez minutos sin lluvia."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "rain_today",
+          "type": "number",
+          "label": {
+            "en": "Rain today (mm)",
+            "fr": "Pluie du jour (mm)",
+            "de": "Regen heute (mm)",
+            "es": "Lluvia de hoy (mm)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "lightning_detected",
+      "label": {
+        "en": "Lightning detected",
+        "fr": "Foudre détectée",
+        "de": "Blitz erkannt",
+        "es": "Rayo detectado"
+      },
+      "description": {
+        "en": "A lightning strike within 40 km. At most one event a minute per station.",
+        "fr": "Un éclair à moins de 40 km. Au plus un événement par minute et par station.",
+        "de": "Ein Blitz im Umkreis von 40 km. Höchstens ein Ereignis pro Minute und Station.",
+        "es": "Un rayo a menos de 40 km. Como mucho un evento por minuto y estación."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "distance",
+          "type": "number",
+          "label": {
+            "en": "Distance (km or mi)",
+            "fr": "Distance (km ou mi)",
+            "de": "Entfernung (km oder mi)",
+            "es": "Distancia (km o mi)"
+          }
+        },
+        {
+          "key": "energy",
+          "type": "number",
+          "label": { "en": "Energy", "fr": "Énergie", "de": "Energie", "es": "Energía" }
+        },
+        {
+          "key": "strikes_last_hour",
+          "type": "number",
+          "label": {
+            "en": "Strikes in the last hour",
+            "fr": "Éclairs de la dernière heure",
+            "de": "Blitze der letzten Stunde",
+            "es": "Rayos de la última hora"
+          }
+        }
+      ]
+    },
+    {
+      "key": "station_unreachable",
+      "label": {
+        "en": "Station unreachable",
+        "fr": "Station injoignable",
+        "de": "Station nicht erreichbar",
+        "es": "Estación inaccesible"
+      },
+      "description": {
+        "en": "Nothing received from the station for ten minutes, on any channel.",
+        "fr": "Plus rien reçu de la station depuis dix minutes, sur aucun canal.",
+        "de": "Seit zehn Minuten nichts von der Station empfangen, auf keinem Kanal.",
+        "es": "Nada recibido de la estación desde hace diez minutos, por ningún canal."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "get_weather",
+      "label": {
+        "en": "Read the station",
+        "fr": "Lire la station",
+        "de": "Station auslesen",
+        "es": "Leer la estación"
+      },
+      "description": {
+        "en": "The current values of the station, for the following actions (a message, a condition).",
+        "fr": "Les valeurs actuelles de la station, pour les actions suivantes (un message, une condition).",
+        "de": "Die aktuellen Werte der Station für die folgenden Aktionen (eine Nachricht, eine Bedingung).",
+        "es": "Los valores actuales de la estación, para las acciones siguientes (un mensaje, una condición)."
+      },
+      "timeout_seconds": 10,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "available",
+          "type": "boolean",
+          "label": {
+            "en": "Data available",
+            "fr": "Données disponibles",
+            "de": "Daten verfügbar",
+            "es": "Datos disponibles"
+          }
+        },
+        {
+          "key": "temperature",
+          "type": "number",
+          "label": {
+            "en": "Temperature",
+            "fr": "Température",
+            "de": "Temperatur",
+            "es": "Temperatura"
+          }
+        },
+        {
+          "key": "feels_like",
+          "type": "number",
+          "label": {
+            "en": "Feels like",
+            "fr": "Ressenti",
+            "de": "Gefühlt",
+            "es": "Sensación térmica"
+          }
+        },
+        {
+          "key": "dew_point",
+          "type": "number",
+          "label": {
+            "en": "Dew point",
+            "fr": "Point de rosée",
+            "de": "Taupunkt",
+            "es": "Punto de rocío"
+          }
+        },
+        {
+          "key": "humidity",
+          "type": "number",
+          "label": {
+            "en": "Humidity (%)",
+            "fr": "Humidité (%)",
+            "de": "Feuchte (%)",
+            "es": "Humedad (%)"
+          }
+        },
+        {
+          "key": "pressure",
+          "type": "number",
+          "label": {
+            "en": "Pressure (hPa)",
+            "fr": "Pression (hPa)",
+            "de": "Luftdruck (hPa)",
+            "es": "Presión (hPa)"
+          }
+        },
+        {
+          "key": "wind_speed",
+          "type": "number",
+          "label": {
+            "en": "Wind speed",
+            "fr": "Vitesse du vent",
+            "de": "Windgeschwindigkeit",
+            "es": "Velocidad del viento"
+          }
+        },
+        {
+          "key": "wind_gust",
+          "type": "number",
+          "label": { "en": "Wind gust", "fr": "Rafale", "de": "Windböe", "es": "Ráfaga" }
+        },
+        {
+          "key": "wind_direction",
+          "type": "number",
+          "label": {
+            "en": "Wind direction (°)",
+            "fr": "Direction du vent (°)",
+            "de": "Windrichtung (°)",
+            "es": "Dirección del viento (°)"
+          }
+        },
+        {
+          "key": "wind_cardinal",
+          "type": "string",
+          "label": {
+            "en": "Wind direction (N, NE...)",
+            "fr": "Direction du vent (N, NE...)",
+            "de": "Windrichtung (N, NE...)",
+            "es": "Dirección del viento (N, NE...)"
+          }
+        },
+        {
+          "key": "uv",
+          "type": "number",
+          "label": { "en": "UV index", "fr": "Indice UV", "de": "UV-Index", "es": "Índice UV" }
+        },
+        {
+          "key": "illuminance",
+          "type": "number",
+          "label": {
+            "en": "Illuminance (lux)",
+            "fr": "Luminosité (lux)",
+            "de": "Helligkeit (Lux)",
+            "es": "Iluminancia (lux)"
+          }
+        },
+        {
+          "key": "rain_last_hour",
+          "type": "number",
+          "label": {
+            "en": "Rain, last hour (mm)",
+            "fr": "Pluie, dernière heure (mm)",
+            "de": "Regen, letzte Stunde (mm)",
+            "es": "Lluvia, última hora (mm)"
+          }
+        },
+        {
+          "key": "rain_today",
+          "type": "number",
+          "label": {
+            "en": "Rain today (mm)",
+            "fr": "Pluie du jour (mm)",
+            "de": "Regen heute (mm)",
+            "es": "Lluvia de hoy (mm)"
+          }
+        },
+        {
+          "key": "raining",
+          "type": "boolean",
+          "label": { "en": "Raining", "fr": "Il pleut", "de": "Es regnet", "es": "Está lloviendo" }
+        },
+        {
+          "key": "lightning_last_hour",
+          "type": "number",
+          "label": {
+            "en": "Lightning strikes, last hour",
+            "fr": "Éclairs, dernière heure",
+            "de": "Blitze, letzte Stunde",
+            "es": "Rayos, última hora"
+          }
+        },
+        {
+          "key": "last_lightning_distance",
+          "type": "number",
+          "label": {
+            "en": "Last lightning distance",
+            "fr": "Distance du dernier éclair",
+            "de": "Entfernung des letzten Blitzes",
+            "es": "Distancia del último rayo"
+          }
+        },
+        {
+          "key": "minutes_since_observation",
+          "type": "number",
+          "label": {
+            "en": "Minutes since the observation",
+            "fr": "Minutes depuis la mesure",
+            "de": "Minuten seit der Messung",
+            "es": "Minutos desde la medición"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_forecast",
+      "label": {
+        "en": "Get the forecast",
+        "fr": "Lire les prévisions",
+        "de": "Vorhersage abrufen",
+        "es": "Obtener la previsión"
+      },
+      "description": {
+        "en": "The Tempest forecast of the station for one day (needs the cloud token).",
+        "fr": "Les prévisions Tempest de la station pour un jour (jeton cloud nécessaire).",
+        "de": "Die Tempest-Vorhersage der Station für einen Tag (Cloud-Token nötig).",
+        "es": "La previsión Tempest de la estación para un día (requiere el token de la nube)."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" },
+          "required": true
+        },
+        {
+          "key": "day",
+          "type": "select",
+          "label": { "en": "Day", "fr": "Jour", "de": "Tag", "es": "Día" },
+          "default": "today",
+          "options": [
+            {
+              "value": "today",
+              "label": { "en": "Today", "fr": "Aujourd'hui", "de": "Heute", "es": "Hoy" }
+            },
+            {
+              "value": "tomorrow",
+              "label": { "en": "Tomorrow", "fr": "Demain", "de": "Morgen", "es": "Mañana" }
+            },
+            {
+              "value": "day_after_tomorrow",
+              "label": {
+                "en": "Day after tomorrow",
+                "fr": "Après-demain",
+                "de": "Übermorgen",
+                "es": "Pasado mañana"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "available",
+          "type": "boolean",
+          "label": {
+            "en": "Forecast available",
+            "fr": "Prévisions disponibles",
+            "de": "Vorhersage verfügbar",
+            "es": "Previsión disponible"
+          }
+        },
+        {
+          "key": "conditions",
+          "type": "string",
+          "label": {
+            "en": "Conditions (English text)",
+            "fr": "Conditions (texte en anglais)",
+            "de": "Bedingungen (englischer Text)",
+            "es": "Condiciones (texto en inglés)"
+          }
+        },
+        {
+          "key": "icon",
+          "type": "string",
+          "label": {
+            "en": "Icon code",
+            "fr": "Code d'icône",
+            "de": "Symbolcode",
+            "es": "Código de icono"
+          }
+        },
+        {
+          "key": "temperature_high",
+          "type": "number",
+          "label": {
+            "en": "Highest temperature",
+            "fr": "Température maximale",
+            "de": "Höchsttemperatur",
+            "es": "Temperatura máxima"
+          }
+        },
+        {
+          "key": "temperature_low",
+          "type": "number",
+          "label": {
+            "en": "Lowest temperature",
+            "fr": "Température minimale",
+            "de": "Tiefsttemperatur",
+            "es": "Temperatura mínima"
+          }
+        },
+        {
+          "key": "precipitation_probability",
+          "type": "number",
+          "label": {
+            "en": "Chance of precipitation (%)",
+            "fr": "Probabilité de précipitations (%)",
+            "de": "Niederschlagswahrscheinlichkeit (%)",
+            "es": "Probabilidad de precipitación (%)"
+          }
+        },
+        {
+          "key": "precipitation_type",
+          "type": "string",
+          "label": {
+            "en": "Precipitation type",
+            "fr": "Type de précipitations",
+            "de": "Niederschlagsart",
+            "es": "Tipo de precipitación"
+          }
+        },
+        {
+          "key": "sunrise",
+          "type": "string",
+          "label": {
+            "en": "Sunrise",
+            "fr": "Lever du soleil",
+            "de": "Sonnenaufgang",
+            "es": "Amanecer"
+          }
+        },
+        {
+          "key": "sunset",
+          "type": "string",
+          "label": {
+            "en": "Sunset",
+            "fr": "Coucher du soleil",
+            "de": "Sonnenuntergang",
+            "es": "Atardecer"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "tempest_station",
+      "label": {
+        "en": "Tempest station",
+        "fr": "Station Tempest",
+        "de": "Tempest-Station",
+        "es": "Estación Tempest"
+      },
+      "description": {
+        "en": "Live weather, 24 h temperature, wind, lightning and connection of a station.",
+        "fr": "Météo en direct, température sur 24 h, vent, foudre et connexion d'une station.",
+        "de": "Live-Wetter, Temperatur über 24 Std., Wind, Blitze und Verbindung einer Station.",
+        "es": "Tiempo en directo, temperatura en 24 h, viento, rayos y conexión de una estación."
+      },
+      "icon": "cloud-drizzle",
+      "settings": [
+        {
+          "key": "station",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Station", "fr": "Station", "de": "Station", "es": "Estación" }
+        }
+      ],
+      "action_timeout_seconds": 20
+    }
+  ]
+}
