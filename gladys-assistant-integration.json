@@ -8,8 +8,8 @@
     "de": "Deine WeatherFlow Tempest Wetterstation in Gladys, über das lokale Netzwerk oder die Cloud.",
     "es": "Su estación meteorológica WeatherFlow Tempest en Gladys, por red local o por la nube."
   },
-  "version": "0.0.1",
-  "docker_image": "ghcr.io/prohand/gladys-weatherflow:0.0.1",
+  "version": "0.0.2",
+  "docker_image": "ghcr.io/prohand/gladys-weatherflow:0.0.2",
   "gladys_version": ">=5.1.0",
   "cover_image": "https://raw.githubusercontent.com/prohand/gladys-weatherflow/main/cover.png",
   "categories": ["environment"],
