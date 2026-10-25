@@ -6,6 +6,20 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Scene action "Get the forecast": new `weather` output, the day's weather as a Gladys
+  condition (`clear`, `rain`, `snow`, `thunderstorm`…), easier to compare in a scene than the
+  Tempest text.
+- Search keywords in the store catalog (anemometer, rain gauge, lightning detector…).
+
+### Changed
+
+- Requires Gladys 5.3.0 or later (catalog keywords).
+- Gladys integration SDK 0.16.
+- The release workflow runs the full store admission check once the image is published;
+  pull requests run it without the image check.
+
 ## [0.0.2] - 2026-10-23
 
 - Maintenance release, no functional change.

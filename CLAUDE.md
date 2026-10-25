@@ -20,7 +20,7 @@ Two channels bring the same Tempest messages (`obs_st`, `evt_strike`, `evt_preci
   personal access token.
 
 Manifest `transports: ["local", "cloud"]`: Gladys shows the "Prefer the local connection"
-toggle, read as `GLADYS_PREFER_LOCAL`. Gladys 5.1+ capabilities: scene triggers (rain started,
+toggle, read as `GLADYS_PREFER_LOCAL`. Requires Gladys 5.3+ (catalog `keywords`). Gladys 5.1+ capabilities: scene triggers (rain started,
 lightning detected, station unreachable), scene actions (read the station, get the forecast)
 and the `tempest_station` widget.
 
@@ -34,7 +34,7 @@ node --test --test-name-pattern "rain"      # tests whose name matches
 npm run lint                                # eslint .
 npm run format:check                        # prettier --check . (CI gate)
 npm run format                              # prettier --write .
-npx github:GladysAssistant/integration-store .   # store admission checks
+npx github:GladysAssistant/integration-store --skip-image-check .   # store admission checks
 ```
 
 CI (`.github/workflows/ci.yml`) runs `format:check`, `lint`, `test` on Node 22 and 24, and on
@@ -91,7 +91,9 @@ docs/{en,fr,de,es}.md     user documentation, re-hosted by Gladys
   version heading: the Release workflow moves the section.
 - **Manifest.** Every text is `{ en, fr, de, es }` (labels, descriptions, placeholders,
   options); `test/manifest.test.js` checks it, plus the store length limits and the links
-  between the manifest and the code (handlers, defaults, options).
+  between the manifest and the code (handlers, defaults, options), and the Gladys 5.3 store
+  rules: `gladys_version >=5.3.0` for `keywords` (1-10, 2-30 characters), `categories` in the
+  store vocabulary, no `countries` (Tempest is worldwide).
 - **User-facing text** is written in the four languages (`src/i18n.js`): action answers,
   connection status, transport badges, widget texts, and `docs/*.md`, kept in sync.
 - **Style.** Prettier formats, ESLint catches mistakes. Comments explain why, in English.

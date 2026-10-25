@@ -11,7 +11,7 @@ Elle fonctionne **sur votre réseau local**, sans compte ni Internet, et/ou
 
 ## Prérequis
 
-- Gladys **5.1 ou plus récent**.
+- Gladys **5.3.0 ou plus récent**.
 - Une station Tempest et son hub, installés avec l'application Tempest.
 - Pour le réseau local : le hub et Gladys sur le **même réseau** (même
   sous-réseau, pas de VLAN ni de Wi-Fi invité entre les deux). Le hub diffuse
@@ -117,7 +117,10 @@ Actions :
   distance du dernier éclair et âge de la mesure en minutes. `available` vaut
   faux tant qu'aucune mesure n'a été reçue.
 - **Lire les prévisions** — les prévisions Tempest pour aujourd'hui, demain ou
-  après-demain : conditions (texte anglais de Tempest), code d'icône,
+  après-demain : conditions (texte anglais de Tempest), code d'icône, la météo
+  sous forme de condition Gladys (`clear`, `partly-cloudy`, `cloud`, `fog`,
+  `rain`, `sleet`, `snow`, `thunderstorm`, `wind` ou `unknown` : facile à
+  comparer dans une condition de scène),
   températures maximale et minimale, probabilité et type de précipitations,
   lever et coucher du soleil. Demande le jeton.
 
