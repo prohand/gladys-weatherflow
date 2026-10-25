@@ -94,6 +94,54 @@ test('scene triggers, scene actions, widgets and categories require Gladys >= 5.
   assert.ok(isAtLeast(minGladysVersion(), [5, 1, 0]), manifest.gladys_version);
 });
 
+// The store's catalog shelves (Gladys 5.3 added transport, vehicles, servers and leisure).
+// An unknown key is only dropped with a warning, so a typo would silently cost the shelf.
+const CATALOG_CATEGORIES = [
+  'climate',
+  'lighting',
+  'energy',
+  'security',
+  'multimedia',
+  'appliances',
+  'environment',
+  'protocols',
+  'network',
+  'notifications',
+  'assistants',
+  'services',
+  'transport',
+  'vehicles',
+  'servers',
+  'leisure',
+];
+
+test('categories are unique keys of the store vocabulary', () => {
+  assert.equal(new Set(manifest.categories).size, manifest.categories.length);
+  for (const category of manifest.categories) {
+    assert.ok(CATALOG_CATEGORIES.includes(category), `unknown catalog category "${category}"`);
+  }
+});
+
+test('keywords, countries and music require Gladys >= 5.3.0', () => {
+  if (manifest.keywords || manifest.countries || manifest.music) {
+    assert.ok(isAtLeast(minGladysVersion(), [5, 3, 0]), manifest.gladys_version);
+  }
+});
+
+test('keywords are 1 to 10 unique search terms of 2 to 30 characters', () => {
+  assert.ok(Array.isArray(manifest.keywords));
+  assert.ok(manifest.keywords.length >= 1 && manifest.keywords.length <= 10);
+  const normalized = manifest.keywords.map((keyword) => keyword.trim().toLowerCase());
+  assert.equal(new Set(normalized).size, normalized.length, 'keywords must be unique');
+  for (const keyword of normalized) {
+    assert.ok(keyword.length >= 2 && keyword.length <= 30, `keyword "${keyword}"`);
+  }
+});
+
+test('no countries: Tempest stations are sold and read worldwide', () => {
+  assert.equal(manifest.countries, undefined);
+});
+
 test('every scene_actions key has a handler, and vice versa', () => {
   const declared = keysOf(manifest.scene_actions);
   assert.deepEqual([...declared].sort(), Object.keys(SCENE_ACTIONS).sort());

@@ -11,7 +11,7 @@ und/oder **über die Tempest-Cloud** mit einem persönlichen Zugriffstoken.
 
 ## Voraussetzungen
 
-- Gladys **5.1 oder neuer**.
+- Gladys **5.3.0 oder neuer**.
 - Eine Tempest-Station mit ihrem Hub, eingerichtet in der Tempest-App.
 - Für das lokale Netzwerk: Hub und Gladys im **selben Netzwerk** (gleiches
   Subnetz, kein VLAN und kein Gäste-WLAN dazwischen). Der Hub sendet seine
@@ -117,7 +117,10 @@ Aktionen:
   letzten Stunde, Entfernung des letzten Blitzes und Alter der Messung in
   Minuten. `available` ist falsch, solange noch keine Messung empfangen wurde.
 - **Vorhersage abrufen** — die Tempest-Vorhersage für heute, morgen oder
-  übermorgen: Bedingungen (englischer Text von Tempest), Symbolcode, Höchst-
+  übermorgen: Bedingungen (englischer Text von Tempest), Symbolcode, das Wetter
+  als Gladys-Bedingung (`clear`, `partly-cloudy`, `cloud`, `fog`, `rain`,
+  `sleet`, `snow`, `thunderstorm`, `wind` oder `unknown`: leicht in einer
+  Szenen-Bedingung zu vergleichen), Höchst-
   und Tiefsttemperatur, Wahrscheinlichkeit und Art des Niederschlags,
   Sonnenaufgang und Sonnenuntergang. Braucht das Token.
 

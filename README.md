@@ -21,14 +21,14 @@ User documentation: [English](docs/en.md) · [Français](docs/fr.md) · [Deutsch
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Device (one per Tempest)    | temperature, humidity, station and sea-level pressure, wind speed / gust / direction, illuminance, UV index, rain of the last hour and of the day, raining, lightning strikes (last hour), last strike distance, battery |
 | Scene triggers              | `rain_started`, `lightning_detected`, `station_unreachable`                                                                                                                                                              |
-| Scene actions               | `get_weather` (current values as outputs), `get_forecast` (cloud forecast of a day)                                                                                                                                      |
+| Scene actions               | `get_weather` (current values as outputs), `get_forecast` (cloud forecast of a day, with its Gladys weather condition)                                                                                                   |
 | Dashboard widget            | `tempest_station`: live tiles, 24 h temperature chart, computed status (feels like, dew point, wind, lightning, battery, connection), Refresh button                                                                     |
 | Configuration screen button | `test_connection`: listens to the LAN and queries the cloud                                                                                                                                                              |
 
 Units: °C / °F, km/h / m/s / mph (the lightning distance follows: km or miles). Rain stays in
 mm and pressure in hPa (Gladys has no imperial unit for them).
 
-Requires **Gladys ≥ 5.1.0** (scene triggers, scene actions and widgets).
+Requires **Gladys ≥ 5.3.0** (scene triggers, scene actions, widgets and the catalog search keywords).
 
 ## Project structure
 
@@ -92,12 +92,13 @@ npm start
 npm run format:check   # Prettier
 npm run lint           # ESLint
 npm test               # node --test
-npx github:GladysAssistant/integration-store .   # store admission checks (needs a released image)
+npx github:GladysAssistant/integration-store --skip-image-check .   # store admission checks
 ```
 
 The CI runs the first three on Node 22 and 24 for every push to `main` and every pull request;
-pull requests also build the Docker image and run the store checks. The store check stays red
-until the first release has pushed the image the manifest names.
+pull requests also build the Docker image and run the store checks without the registry check
+(`--skip-image-check`): the image a pull request names is only pushed by the release. The
+Release workflow runs the full check, image included, once it has published the image.
 
 ## Publish
 

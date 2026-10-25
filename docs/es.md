@@ -11,7 +11,7 @@ nube Tempest** con un token de acceso personal.
 
 ## Requisitos
 
-- Gladys **5.1 o posterior**.
+- Gladys **5.3.0 o posterior**.
 - Una estación Tempest y su hub, configurados con la app Tempest.
 - Para la red local: el hub y Gladys en la **misma red** (misma subred, sin
   VLAN ni Wi-Fi de invitados entre ellos). El hub difunde sus datos por UDP en
@@ -115,7 +115,10 @@ Acciones:
   última hora, distancia del último rayo y antigüedad de la medición en
   minutos. `available` es falso mientras no se haya recibido ninguna medición.
 - **Obtener la previsión** — la previsión Tempest para hoy, mañana o pasado
-  mañana: condiciones (texto en inglés de Tempest), código de icono,
+  mañana: condiciones (texto en inglés de Tempest), código de icono, el tiempo
+  como condición de Gladys (`clear`, `partly-cloudy`, `cloud`, `fog`, `rain`,
+  `sleet`, `snow`, `thunderstorm`, `wind` o `unknown`: fácil de comparar en una
+  condición de escena),
   temperaturas máxima y mínima, probabilidad y tipo de precipitación, amanecer
   y atardecer. Requiere el token.
 

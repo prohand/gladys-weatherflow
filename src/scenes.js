@@ -16,7 +16,7 @@
 //     output, not an error. Throwing fails this action only.
 // -----------------------------------------------------------------------------
 
-import { createLogger } from '@gladysassistant/integration-sdk';
+import { createLogger, WEATHER_CONDITIONS } from '@gladysassistant/integration-sdk';
 import { cardinal } from './tempest/protocol.js';
 import { fetchDailyForecast } from './tempest/cloud.js';
 import { findStation } from './devices/tempest.js';
@@ -31,6 +31,35 @@ export const SCENE_ACTION_KEYS = {
 
 // The forecast days a scene can ask for, as the `day` field options.
 export const FORECAST_DAYS = { today: 0, tomorrow: 1, day_after_tomorrow: 2 };
+
+// Tempest forecast icons -> the conditions of the Gladys weather vocabulary
+// (WEATHER_CONDITIONS). The icon is a stable code where `conditions` is a
+// sentence ("Rain Likely") a scene cannot compare reliably. A "possibly-"
+// icon keeps its phenomenon; the -day / -night suffix is a rendering detail,
+// not the weather (the Gladys pivot deprecated `night` for that reason).
+const ICON_CONDITIONS = {
+  clear: WEATHER_CONDITIONS.CLEAR,
+  'partly-cloudy': WEATHER_CONDITIONS.PARTLY_CLOUDY,
+  cloudy: WEATHER_CONDITIONS.CLOUD,
+  foggy: WEATHER_CONDITIONS.FOG,
+  rainy: WEATHER_CONDITIONS.RAIN,
+  sleet: WEATHER_CONDITIONS.SLEET,
+  snow: WEATHER_CONDITIONS.SNOW,
+  thunderstorm: WEATHER_CONDITIONS.THUNDERSTORM,
+  windy: WEATHER_CONDITIONS.WIND,
+};
+
+/**
+ * The Gladys weather condition of a Tempest forecast icon, `unknown` for an
+ * icon this table does not know, `null` without an icon.
+ */
+export function weatherCondition(icon) {
+  if (typeof icon !== 'string' || icon === '') {
+    return null;
+  }
+  const phenomenon = icon.replace(/^possibly-/, '').replace(/-(day|night)$/, '');
+  return ICON_CONDITIONS[phenomenon] ?? WEATHER_CONDITIONS.UNKNOWN;
+}
 
 /** Drop the outputs that have no value: an absent output reads as empty. */
 function defined(outputs) {
@@ -110,6 +139,7 @@ export const SCENE_ACTIONS = {
       available: true,
       conditions: day.conditions,
       icon: day.icon,
+      weather: weatherCondition(day.icon),
       temperature_high: units.temperature(day.air_temp_high ?? null, config),
       temperature_low: units.temperature(day.air_temp_low ?? null, config),
       precipitation_probability: day.precip_probability,

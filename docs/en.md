@@ -11,7 +11,7 @@ It works **on your local network**, with no account and no Internet, and/or
 
 ## Requirements
 
-- Gladys **5.1 or later**.
+- Gladys **5.3.0 or later**.
 - A Tempest station and its hub, set up in the Tempest app.
 - For the local network: the hub and Gladys on the **same network** (same
   subnet, no VLAN or guest Wi-Fi between them). The hub broadcasts its data in
@@ -112,7 +112,10 @@ Actions:
   distance and the age of the observation in minutes. `available` is false
   when no observation has been received yet.
 - **Get the forecast** — the Tempest forecast for today, tomorrow or the day
-  after: conditions (English text from Tempest), icon code, highest and lowest
+  after: conditions (English text from Tempest), icon code, the weather as a
+  Gladys condition (`clear`, `partly-cloudy`, `cloud`, `fog`, `rain`, `sleet`,
+  `snow`, `thunderstorm`, `wind` or `unknown`: easy to compare in a scene
+  condition), highest and lowest
   temperature, chance and type of precipitation, sunrise and sunset. Needs
   the token.
 

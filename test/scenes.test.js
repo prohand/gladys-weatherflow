@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { SCENE_ACTIONS, SCENE_ACTION_KEYS } from '../src/scenes.js';
+import { WEATHER_CONDITIONS } from '@gladysassistant/integration-sdk';
+import { SCENE_ACTIONS, SCENE_ACTION_KEYS, weatherCondition } from '../src/scenes.js';
 import { stationIds } from '../src/devices/tempest.js';
 import { SERIAL, T0, cloudObs, localObs, localStrike, setup } from './helpers/tempest.js';
 
@@ -89,6 +90,7 @@ test('get_forecast reads the asked day, converted', async () => {
     available: true,
     conditions: 'Rain Likely',
     icon: 'rainy',
+    weather: 'rain',
     temperature_high: 15,
     temperature_low: 9,
     precipitation_probability: 80,
@@ -142,5 +144,23 @@ test('the scene events carry only declared keys, flat and scalar', async () => {
       assert.ok(allowed.includes(name), `${key}: "${name}" is not declared`);
       assert.ok(value === null || typeof value !== 'object', `${key}.${name} is flat`);
     }
+  }
+});
+
+test('the forecast icon becomes a Gladys weather condition', () => {
+  assert.equal(weatherCondition('clear-night'), 'clear');
+  assert.equal(weatherCondition('partly-cloudy-day'), 'partly-cloudy');
+  assert.equal(weatherCondition('cloudy'), 'cloud');
+  assert.equal(weatherCondition('foggy'), 'fog');
+  assert.equal(weatherCondition('possibly-rainy-night'), 'rain');
+  assert.equal(weatherCondition('possibly-sleet-day'), 'sleet');
+  assert.equal(weatherCondition('snow'), 'snow');
+  assert.equal(weatherCondition('possibly-thunderstorm-day'), 'thunderstorm');
+  assert.equal(weatherCondition('windy'), 'wind');
+  assert.equal(weatherCondition('volcano'), 'unknown');
+  assert.equal(weatherCondition(undefined), null);
+  for (const icon of ['clear-day', 'rainy', 'windy', 'volcano']) {
+    assert.ok(Object.values(WEATHER_CONDITIONS).includes(weatherCondition(icon)), icon);
+    assert.notEqual(weatherCondition(icon), WEATHER_CONDITIONS.NIGHT, 'night is deprecated');
   }
 });
